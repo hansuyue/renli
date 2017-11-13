@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--设置浏览器的布局视口，只在移动端浏览器起作用-->
+		<meta name="viewport" content="width=width-device,initial-scale=1,user-scalable=no" />
+		<title></title>
+		<!--引入bootstrap的核心css-->
+		<link rel="stylesheet" href="js/bootstrap/css/bootstrap.css" />
+		<style type="text/css">
+			
+			*{
+				
+				margin: 0;
+				padding: 0;
+				
+			}
+			body{
+				background: #333333;
+			}
+			/*头像区*/
+			.touxiang{
+				width: 150px;
+				height: 150px;
+				margin: 20px auto;
+				border-radius: 50%;
+				border: 5px solid #FFFFFF;
+				overflow: hidden;
+				
+				
+				
+			}
+			.touxiang img{
+				width: 100;
+				display: block;
+				
+				
+			}
+			
+			.nav-left .list-group-item{
+				
+				background: transparent;
+				border-radius: 0!important;
+				border: none;
+				text-align: center;
+				line-height: 35px;
+				font-size: 16px;
+				color: #EEEEEE;
+				border-bottom: 1px solid #444444;
+				
+			}
+			
+			
+		</style>
+		<!--判断如果是IE9以下，引入兼容h5标签的js文件，注意空格的位置-->		
+		<!--[if lt IE 9]>
+		<script src="js/bootstrap/js/html5shiv.min.js"></script>
+		<script src="js/bootstrap/js/respond.min.js"></script>		
+		<![end if] -->
+	</head>
+	<body>
+		<div class="container-fluid">	
+			
+			<!--头像区-->
+			<div id="headPic"class="row touxiang">
+				<a href="updateEmpPic.html" target="content" title="点击修改头像">
+					<img src="images/liudehua.jpg" class="img-responsive"/>
+				</a>
+			</div>
+			<!--用户名-->
+			<p class="text-center" style="color:#eeeeee">
+				欢迎你，<span id="empLoginName"></span>
+			</p>
+			
+			<!--导航菜单-->
+			<div id="" class="row nav-left">
+				
+				<div class="list-group">				
+					<a href="QueryDeptServlet" class="list-group-item" target="content">部门管理</a>
+					<a href="queryJob.html" class="list-group-item" target="content">职务管理</a>
+					<a href="queryEmp.html" class="list-group-item" target="content">员工管理</a>
+					<a href="Analysis.html" class="list-group-item" target="content">数据分析</a>
+					<a href="updatePwd.html" class="list-group-item" target="content">修改密码</a>
+					<a href="" class="list-group-item" target="content">数据检索</a>
+					<a href="queryPic.html" class="list-group-item" target="content">公司图库</a>
+					<a href="logout.jsp" class="list-group-item" target="content">退出登录</a>					
+				</div>
+				
+			</div>
+			
+			
+			
+			
+		</div>
+		
+		<!--引入jquery-->
+		<script src="js/jquery.js"></script>
+		<!--引入公共js-->
+		<script src="js/global.js" type="text/javascript" charset="utf-8"></script>
+		<!--引入bootstrap的js功能-->
+		<script src="js/bootstrap/js/bootstrap.js"></script>
+		<!--引入layer-->
+		<script src="js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			$(function(){
+				var name = localStorage.getItem('empLoginName');
+				var pic = localStorage.getItem('empPic')
+				//alert(name)
+				$('#empLoginName').html(name);
+				
+				if( pic != null){
+					$('#headPic img').attr('src',pic)
+				}
+				
+				
+				
+			});
+			
+		</script>
+	</body>
+</html>

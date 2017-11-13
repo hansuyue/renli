@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--设置浏览器的布局视口，只在移动端浏览器起作用-->
+		<meta name="viewport" content="width=width-device,initial-scale=1,user-scalable=no" />
+		<title></title>
+		<!--引入bootstrap的核心css-->
+		<link rel="stylesheet" href="js/bootstrap/css/bootstrap.css" />
+		
+		<!--判断如果是IE9以下，引入兼容h5标签的js文件，注意空格的位置-->		
+		<!--[if lt IE 9]>
+		<script src="js/bootstrap/js/html5shiv.min.js"></script>
+		<script src="js/bootstrap/js/respond.min.js"></script>		
+		<![end if] -->
+	</head>
+	<body>
+		<div class="container">	
+			
+			<ol class = "breadcrumb">
+				<li><a href="#">人力资源管理系统</a></li>
+				<li><a href="#">数据分析</a></li>
+				<li>数据分析图表</li>
+			</ol>
+			<h2 class="page-header">数据统计分析</h2>
+			
+			<div id="" class="row" >
+				
+				<!--员工人数统计-->
+				<div id="empCount" class="col-sm-12" style="height: 400px;">
+					
+					
+					
+				</div>
+				<!--部门平均工资统计-->
+				<div id="">
+					
+				</div>
+				
+				
+				
+				
+			</div>
+			
+			
+			
+			
+			
+		</div>
+		
+		<!--引入jquery-->
+		<script src="js/jquery.js"></script>
+		<!--引入公共js-->
+		<script src="js/global.js" type="text/javascript" charset="utf-8"></script>
+		<!--引入bootstrap的js功能-->
+		<script src="js/bootstrap/js/bootstrap.js"></script>
+		<!--引入layer-->
+		<script src="js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<!--引入图表插件-->
+		<script src="js/echarts/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script>
+		
+			// 统计部门的员工人数
+			var myChart = echarts.init(document.getElementById('empCount'));
+			
+			// 指定图表的配置项和数据
+			var option = {
+			    // 标题
+			    title: {
+			        text: '部门人数统计'
+			    },
+			    // 工具箱
+			    toolbox: {
+			        show: true,
+			        feature: {
+			            saveAsImage: {
+			                show: true
+			            }
+			        }
+			    },
+			    // 图例
+			    legend: {
+			        data: ['人数']
+			    },
+			    // x轴
+			    xAxis: {
+			        data: []
+			    },
+			    yAxis: {},
+			    // 数据
+			    series: [{
+			        name: '人数',
+			        type: 'bar',
+			        data: []
+			    }]
+			};
+			
+			$.getJSON(baseUrl + '/QueryEmpCountServlet',function(data){
+				
+				console.log(data.empDeptName)
+				
+				var  deptNames= [];//部门名称
+				var empCounts= [];//部门人数
+				
+				
+				
+				//遍历json数据
+				$.each(data,function(index,item) {		
+					deptNames.push(item.deptName);//添加部门
+					empCounts.push(item.empCount);//添加人数	
+				});
+				option.xAxis.data = deptNames;
+				option.series[0].data = empCounts
+//				console.log(option.xAxis.data);
+//				console.log(option.series[0].data);
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+			});
+		</script>
+		
+		
+	</body>
+</html>

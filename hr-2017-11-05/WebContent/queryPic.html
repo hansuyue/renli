@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--设置浏览器的布局视口，只在移动端浏览器起作用-->
+		<meta name="viewport" content="width=width-device,initial-scale=1,user-scalable=no" />
+		<title></title>
+		<!--引入bootstrap的核心css-->
+		<link rel="stylesheet" href="js/bootstrap/css/bootstrap.css" />
+		<style type="text/css">
+			.img-list img {
+				border: none;
+				width: 200px;
+			}
+			
+			.img-list .item {
+				position: relative;
+				left: 0px;
+				top: 0px;
+				padding: 15px;
+				background: #EEEEEE;
+				margin: 5px;
+			}
+			
+			.img-list .item p {
+				font-size: 14px;
+				text-align: center;
+				color: #333;
+				white-space: normal;
+				width: 200px;
+			}
+			.item .del-btn{
+				float: left;
+				display: none;
+			}
+			.item:hover .del-btn{
+				display: block;
+			}
+			.item .download-btn{
+				display: none;
+				float: left;
+				margin-left: 5px;
+			}
+			.item:hover .download-btn{
+				display: block;
+			}
+		</style>
+		<!--判断如果是IE9以下，引入兼容h5标签的js文件，注意空格的位置-->		
+		<!--[if lt IE 9]>
+		<script src="js/bootstrap/js/html5shiv.min.js"></script>
+		<script src="js/bootstrap/js/respond.min.js"></script>		
+		<![end if] -->
+	</head>
+	<body>
+		<div class="container">	
+			
+			<ol class = "breadcrumb">
+				<li><a href="#">人力资源管理系统</a></li>
+				<li><a href="#">图库管理</a></li>
+				<li>图片展示列表</li>
+			</ol>
+			<h2 class="page-header">图片展示列表</h2>
+			
+			<input type="button" name="addbtn" id="addbtn" value="添加图片" class="btn btn-success"/>
+				
+			<!--瀑布流开始-->
+				
+			<div class="row img-list" id="pic">
+				
+				<!--<div class="item">
+					<a href="#">
+						
+						<img src="images/liudehua.jpg"/>
+						
+					</a>
+					
+					<p>这是文字描述</p>
+					<input type="button" name="" id="" value="删除" class="btn btn-danger btn-xs del-btn" />
+					<input type="button" name="" id="" value="下载" class="btn btn-info btn-xs download-btn"/>
+						
+				</div>-->
+				
+			</div>
+			
+			<!--瀑布流结束-->
+			
+		</div>
+		
+		<!--引入jquery-->
+		<script src="js/jquery.js"></script>
+		<!--引入公共js-->
+		<script src="js/global.js" type="text/javascript" charset="utf-8"></script>
+		<!--引入bootstrap的js功能-->
+		<script src="js/bootstrap/js/bootstrap.js"></script>
+		<!--引入layer-->
+		<script src="js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/masony/jquery.masonry.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			$(function(){
+				var $container = $('.img-list'); 
+				$.getJSON(baseUrl + '/QueryPicServlet',function(data){
+					
+					var html;
+					
+					$.each(data,function(index,item){
+						html = '';
+						html += '<div class="item">';
+						html += '	<a href="showImg.jsp?picId=' + item.picId + '" title="' + item.picAuthor + ',' + item.picDatetime + '">';
+						html += '		<img src="GetPicServlet?picId=' + item.picId + '"/>';
+						html += '	</a>';
+						html += '	<p>' + item.picInfo + '</p>';
+						html += '	<input type="button" name="" id="' + item.picId + '" value="删除" class="btn btn-danger btn-xs del-btn" data-id="' + item.picId + '"/>';
+						html += '	<a name="" id="" href="DownloadPicServlet?picId=' + item.picId + '" class="btn btn-info btn-xs download-btn">下载</a>';
+						html += '</div>';
+						
+						$container.append(html);
+						
+						
+					
+						//当图片加载完毕
+					    $container.imagesLoaded(function(){
+					    	
+					    	//生成瀑布流布局
+					        $container.masonry({
+					            itemSelector: '.item',
+					            columnWidth: 5 //每两列之间的间隙为5像素
+					        });
+					        
+					    });	
+					});
+					
+					
+				})
+				.error(function(xhr){
+					layer.msg('请求失败' + xhr.status);
+				})
+				
+				$('#addbtn').click(function(){
+					
+					layer.open({
+						title:'添加图片',
+					    type: 2, 				   
+					    area: ['700px', '600px'], //宽高
+					    content: 'addPic.html'
+					});
+					
+					
+				})
+				
+				
+				$('.img-list').on('click','.del-btn',function(){
+						
+						alert('确认删除吗？')
+						var that = this;
+						var picId = $(this).attr('data-id');
+						console.log(picId);
+						$.post(baseUrl + '/DelPicServlet',{picId:picId},function(){
+						layer.msg('删除成功！');
+						//删除前端数据行
+//						window.location.reload();
+						$(that).parent('.item').remove();
+						$container.imagesLoaded(function(){
+					    	
+					    	//生成瀑布流布局
+					        $container.masonry({
+					            itemSelector: '.item',
+					            columnWidth: 5 //每两列之间的间隙为5像素
+					        });
+					        
+					    });	
+					})
+						
+						
+					});	
+				
+			});
+			
+		</script>
+	</body>
+</html>
